@@ -3,7 +3,7 @@ defmodule Elixirbot.Mixfile do
 
   def project do
     [app: :elixirbot,
-     version: "0.1",
+     version: "1.0.0",
      deps: deps(),
      elixirc_options: [debuf_info: true],
      escript_embed_elixir: true,
@@ -17,6 +17,6 @@ defmodule Elixirbot.Mixfile do
   end
 
   defp deps do
-    [{:genx, github: "yrashk/genx"}]
+    [{:genx, github: "chrissphinx/genx"}]
   end
 end

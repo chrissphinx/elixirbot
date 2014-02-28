@@ -14,7 +14,7 @@ defmodule Elixirbot.Client do
     address - 'irc.freenode.net' or {199, 195, 193, 196}
     port    - 6667
   """
-  @spec connect(char_list(), non_neg_integer()), do: {:ok, :gen_tcp.socket()} |
+  @spec connect(char_list(), non_neg_integer()) :: {:ok, :gen_tcp.socket()} |
                                                      {:error, char_list()}
   def connect(address, port // 6667) do
     case :gen_tcp.connect(address, port, [{:packet, :line}]) do
@@ -40,7 +40,7 @@ defmodule Elixirbot.Client do
   @doc"""
   Closes a connection.
   """
-  @spec close(:gen_tcp.socket()), do: :ok | {:error, char_list()}
+  @spec close(:gen_tcp.socket()) :: :ok | {:error, char_list()}
   def close(socket) do
     case :int.peername(socket) do
       {:ok, {t_address, port}} ->
@@ -57,7 +57,7 @@ defmodule Elixirbot.Client do
   @doc"""
   Send data and wait for a reply.
   """
-  @spec send(:gen_tcp.socket(), :gen_tcp.packet()), do:
+  @spec send(:gen_tcp.socket(), :gen_tcp.packet()) ::
                                               {:ok, :gen_tcp.packet()} |
                                               {:error, :gen_tcp.reason()}
   def send(socket, data) do
@@ -68,7 +68,7 @@ defmodule Elixirbot.Client do
   @doc"""
   Responds to a message accordingly.
   """
-  @spec parse_line(:gen_tcp.socket(), char_list()), do: :ok
+  @spec parse_line(:gen_tcp.socket(), char_list()) :: :ok
   def parse_line(socket, [_,'376'|_]) do
     {:ok, channels} = :application.get_env(:ircbot, :ircbot_channels)
 
@@ -82,7 +82,14 @@ defmodule Elixirbot.Client do
     :ok
   end
 
-  @spec parse_line(:gen_tcp.socket(), char_list()), do: :ok
+  @spec parse_line(:gen_tcp.socket(), char_list()) :: :ok
+  def parse_line(socket, [_,_,channel,'@id'|t]) do
+    :gen_tcp.send(socket, 'PRIVMSG ' ++ channel ++ ' :' ++ Enum.join(t, " "))
+
+    :ok
+  end
+
+  @spec parse_line(:gen_tcp.socket(), char_list()) :: :ok
   def parse_line(socket, ['PING'|rest]) do
     :gen_tcp.send(socket, 'PONG' ++ rest ++ '\r\n')
     IO.puts("PING")
@@ -90,7 +97,7 @@ defmodule Elixirbot.Client do
     :ok
   end
 
-  @spec parse_line(:gen_tcp.socket(), char_list()), do: :ok
+  @spec parse_line(:gen_tcp.socket(), char_list()) :: :ok
   def parse_line(_, _) do
     :ok
   end

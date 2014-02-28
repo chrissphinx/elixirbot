@@ -20,14 +20,14 @@ defmodule Elixirbot.Application do
   @doc """
   Starts the Elixirbot application in a permanent state.
   """
-  @spec start(), do: :ok
+  @spec start() :: :ok
   def start() do
     :ok = Application.start(:elixirbot, [dependencies: true, type: :permanent])
   end
 
-  @spec main(char_list()), do: no_return()
+  @spec main(char_list()) :: no_return()
   def main(args) do
-    args = lc arg inlist args, do: list_to_binary(arg)
+    args = lc arg inlist args, do: list_to_bitstring(arg)
 
     {opts, _} = OptionParser.parse(args, [flags: [:help,
                                                   :version],
@@ -54,7 +54,7 @@ defmodule Elixirbot.Application do
   @doc """
   Sets up the Elixirbot config
   """
-  @spec init_config(), do: :ok
+  @spec init_config() :: :ok
   def init_config() do
     cfg = [ircbot_application: :hybrid,
            ircbot_nickname: 'exbot',
@@ -74,7 +74,7 @@ defmodule Elixirbot.Application do
   """
   @spec start(:normal |
               {:takeover, node()} |
-              {:failover, node()}, []), do: {:ok, pid(), nil}
+              {:failover, node()}, []) :: {:ok, pid(), nil}
   def start(_, []) do
    :ok = init_config()
 
@@ -88,7 +88,7 @@ defmodule Elixirbot.Application do
   @doc"""
   Stops the Elixirbot supervision tree.
   """
-  @spec stop(nil), do: :ok
+  @spec stop(nil) :: :ok
   def stop(nil) do
         :ok
     end

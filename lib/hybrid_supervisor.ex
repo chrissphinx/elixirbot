@@ -3,7 +3,7 @@ defmodule Elixirbot.HybridSupervisor do
 
   import GenX.Supervisor
 
-  @spec start_link(), do: pid()
+  @spec start_link() :: pid()
   def start_link() do
     children = [GenX.Supervisor.Child.new(id: :ircbot_listener_sup,
                                           start_func:
@@ -17,7 +17,7 @@ defmodule Elixirbot.HybridSupervisor do
     {:ok, _} = GenX.Supervisor.start_link(sup, {__MODULE__, nil})
   end
 
-  @spec init({term(), nil}), do: {:ok, {{:supervisor.strategy(),
+  @spec init({term(), nil}) :: {:ok, {{:supervisor.strategy(),
                                          non_neg_integer(),
                                          non_neg_integer()},
                                         [:supervisor.child_spec()]}}

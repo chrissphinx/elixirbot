@@ -6,12 +6,12 @@ defmodule Elixirbot.Listener.ListenerSupervisor do
 
   import GenX.Supervisor
 
-  @spec start_link(), do: pid()
+  @spec start_link() :: pid()
   def start_link() do
     {:ok, _} = :supervisor.start_link(__MODULE__, nil)
   end
 
-  @spec init(nil), do: {:ok, {{:supervisor.strategy(),
+  @spec init(nil) :: {:ok, {{:supervisor.strategy(),
                                  non_neg_integer(),
                                  non_neg_integer()},
                                 [:supervisor.child_spec()]}}
